@@ -7,7 +7,6 @@
 
 - A visually appealing homepage
 - A simulation of the Iowa gambling task that the user observes which compares the process and results of a group with alzhiermers and a control group
-- 
 - A simulation of the prisoners dilemma that the user can interact with
 - Desciptions of research and findings surrounding the topic alongside the simulations
 
