@@ -7,6 +7,7 @@
 
 let brainNodes = [];
 let nodePositions;
+let rotationAngle = 0;
 const MIRROR_NODE = -1;
 
 class BrainNode{
@@ -61,7 +62,15 @@ function draw() {
 
 
 function drawBrain(){
-  orbitControl();
+  if (mouseIsPressed){
+    orbitControl();
+    rotationAngle = 0;
+  }
+  else{
+    rotationAngle+= 0.002;
+    rotateY(rotationAngle);
+  }
+  
   stroke(255);
   for (node of brainNodes){
     for (otherNode of brainNodes){
@@ -70,4 +79,6 @@ function drawBrain(){
       }
     }
   }
+
+  //rotate the brain
 }
