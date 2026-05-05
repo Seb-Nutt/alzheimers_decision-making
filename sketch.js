@@ -6,46 +6,28 @@
 // - describe what you did to take this project "above and beyond"
 
 let brainNodes = [];
-let brainRegions = [];
+//keep adding colors
+let regionColors = [['grey'], ['red'], ['orange']];
 let nodePositions;
 let rotationAngle = 0;
 let selectingLobe = false;
 
 class BrainNode{
-  constructor(x,y,z) {
+  constructor(x,y,z,region) {
     this.x = x;
     this.y = y;
     this.z = z;
+    this.regionColor = regionColors[region];
     this.NODE_CONNECTION_RANGE = 200;
   }
 
   connect(otherNode){
     if (dist(this.x,this.y,this.z,otherNode.x,otherNode.y,otherNode.z) < this.NODE_CONNECTION_RANGE){
-      fill(255);
+      
       line(this.x,this.y,this.z,otherNode.x,otherNode.y,otherNode.z);
     }
   }
 }
-
-class BrainRegion{
-  constructor(borderNodes,r,g,b) {
-    this.borderNodes = borderNodes;
-    this.r = r;
-    this.g = g;
-    this.b = b;
-    this.alpha = 100;
-  }
-
-  colorIn(){
-    fill(this.r,this.g,this.b,this.alpha);
-    beginShape();
-    for (let point of borderNodes){
-      vertex(point[0],point[1]);
-    }
-    endShape(CLOSE);
-  }
-}
-
 
 function preload() {
   nodePositions = loadStrings("assets/nodePositions.txt");
@@ -66,15 +48,12 @@ function setup() {
 
 
   for (node of nodePositions){
-    //create the regions
-    //add a number on each node to classify the node in a region
-
-    //create the nodes
-    brainNodes.push(new BrainNode(node[0]-150,node[1]+50,node[2]));
+    //create the nodes and classify thier region
+    brainNodes.push(new BrainNode(node[0]-150,node[1]+50,node[2], node[3]));
 
     //Mirror the node if it is not centered
     if (node[2] !== 0){
-      brainNodes.push(new BrainNode(node[0]-150,node[1]+50,node[2]*-1));
+      brainNodes.push(new BrainNode(node[0]-150,node[1]+50,node[2]*-1, node[3]));
     }
   }
 
@@ -96,20 +75,24 @@ function drawBrain(){
       rotationAngle -= 0.05;
     }
 
-    for (let region of brainRegions){
-
-    }
-
     rotateY(rotationAngle);
   }
   else{
     rotationAngle+= 0.002;
     rotateY(rotationAngle);
   }
-  
-  stroke(255);
+
   for (node of brainNodes){
     for (otherNode of brainNodes){
+
+      //if selecting a lobe then color the regions
+      if (selectingLobe){
+        stroke(node.regionColor);
+      }
+      else{
+        stroke(255);
+      }
+
       if (node !== otherNode){
         node.connect(otherNode);
       }
