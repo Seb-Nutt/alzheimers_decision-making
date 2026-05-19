@@ -37,7 +37,7 @@ class BrainNode{
   connect(otherNode){
     //use a scale
     
-    if (dist(this.x,this.y,this.z,otherNode.x,otherNode.y,otherNode.z) < this.NODE_CONNECTION_RANGE && (this.regionColor === otherNode.regionColor || !selectingLobe) && (this.z >= 0 && otherNode.z >= 0 || !selectingLobe)){
+    if (dist(this.x,this.y,this.z,otherNode.x,otherNode.y,otherNode.z) < this.NODE_CONNECTION_RANGE && (this.regionColor === otherNode.regionColor || !selectingLobe)){
       line(this.x,this.y,this.z,otherNode.x,otherNode.y,otherNode.z);
     }
   }
@@ -53,6 +53,10 @@ class RegionButton{
     this.buttonWidth = this.region.length*20;
     this.buttonHeight = 100;
     this.backgroundColorDeficit = 50;
+    this.clicked = false;
+    this.zoom = new Zoom(Vec.fromList([this.x + this.buttonWidth,this.y + this.buttonHeight]));
+
+
   }
 
   drawButton(opacity){
@@ -73,6 +77,12 @@ class RegionButton{
     return this.x < mouseX-width/2 && this.y < mouseY-height/2 && this.x + this.buttonWidth > mouseX-width/2 && this.y + this.buttonHeight > mouseY- height/2;
   }
 
+  selected(){
+    this.zoom.apply();    
+    this.zoom.zoom(
+      Vec.fromList([this.x + this.buttonWidth,this.y + this.buttonHeight]),100000
+    );
+  }
 }
 
 function preload() {
@@ -85,7 +95,7 @@ function setup() {
   createCanvas(windowWidth, windowHeight, WEBGL);
   scale(width/DEFAULT_HEIGHT,height/DEFAULT_HEIGHT);
 
-  regionColors = [color(75), color(200,0,0), color(200,200,0), color(0,200,0), color(0,200,200), color(0,0,200)];
+  regionColors = [color(150), color(200,0,0), color(200,200,0), color(0,200,0), color(0,200,200), color(0,0,200)];
 
   //changing the string posisions into numbers
   for (let node = 0; node < nodePositions.length; node++){
@@ -198,9 +208,10 @@ function keyPressed(){
 
 function mouseClicked(){
   if (selectingLobe){
-    for(let button of regionButtons){
+    for (let button of regionButtons){
       if (button.detectHovering()){
-        selectedRegion = button.region;
+        button.clicked = true;
+        button.selected();
       }
     }
   }
