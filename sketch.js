@@ -5,6 +5,7 @@
 // Extra for Experts:
 // - describe what you did to take this project "above and beyond"
 
+
 let brainNodes = [];
 let regionColors;
 let regionNodes = [[],[],[],[],[],[]];
@@ -49,39 +50,47 @@ class RegionButton{
     this.y = y;
     this.region = region;
     this.regionID = id;
-    this.secondaryColor = regionColors[this.regionID];
+    this.primaryColor = regionColors[this.regionID];
+    this.secondaryColor;
     this.buttonWidth = this.region.length*20;
     this.buttonHeight = 100;
     this.backgroundColorDeficit = 50;
     this.clicked = false;
-    this.zoom = new Zoom(Vec.fromList([this.x + this.buttonWidth,this.y + this.buttonHeight]));
-
-
   }
 
   drawButton(opacity){
     stroke('white');
 
     this.backgroundColorDeficit = this.detectHovering() ? 100 : 70;
+    
+    this.secondaryColor = color(red(this.primaryColor)-100,green(this.primaryColor)-100,blue(this.primaryColor)-100);
 
-    fill(red(this.secondaryColor)-this.backgroundColorDeficit,green(this.secondaryColor)-this.backgroundColorDeficit,blue(this.secondaryColor)-this.backgroundColorDeficit,opacity);
+    fill(color(red(this.primaryColor)-this.backgroundColorDeficit,green(this.primaryColor)-this.backgroundColorDeficit,blue(this.primaryColor)-this.backgroundColorDeficit));
     rect(this.x,this.y,this.buttonWidth,this.buttonHeight);
     textAlign(CENTER);
     textSize(this.buttonHeight/3);
     textFont(quicksandFont);
-    fill(this.secondaryColor,opacity);
+    fill(this.primaryColor,opacity);
     text(this.region, this.x + this.buttonWidth/2, this.y + this.buttonHeight/2);
+
+    if (this.clicked){
+      this.displayInfoChunk();
+    }
   }
 
   detectHovering(){
     return this.x < mouseX-width/2 && this.y < mouseY-height/2 && this.x + this.buttonWidth > mouseX-width/2 && this.y + this.buttonHeight > mouseY- height/2;
   }
 
-  selected(){
-    this.zoom.apply();    
-    this.zoom.zoom(
-      Vec.fromList([this.x + this.buttonWidth,this.y + this.buttonHeight]),100000
-    );
+  displayInfoChunk(){
+    //textbox
+    fill(this.secondaryColor);
+    stroke(this.primaryColor);
+    box(width/2,height/2);
+
+    //text
+    //update to plaace on top of the textbox
+    text(this.region,0,height/4);
   }
 }
 
@@ -93,7 +102,7 @@ function preload() {
 
 function setup() {
   createCanvas(windowWidth, windowHeight, WEBGL);
-  scale(width/DEFAULT_HEIGHT,height/DEFAULT_HEIGHT);
+  scale(width/DEFAULT_WIDTH,height/DEFAULT_HEIGHT);
 
   regionColors = [color(150), color(200,0,0), color(200,200,0), color(0,200,0), color(0,200,200), color(0,0,200)];
 
@@ -210,8 +219,11 @@ function mouseClicked(){
   if (selectingLobe){
     for (let button of regionButtons){
       if (button.detectHovering()){
-        button.clicked = true;
-        button.selected();
+        button.clicked = !button.clicked;
+        button.displayInfoChunk();
+      }
+      else{
+        button.clicked = false;
       }
     }
   }

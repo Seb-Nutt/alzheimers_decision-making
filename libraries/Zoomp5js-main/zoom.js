@@ -12,9 +12,9 @@ class Zoom {
   zoom(loc, zoom) {
     const newSize = this.size - zoom;
   
-    if (newSize < 0)
+    if (newSize < 0){
       return;
-
+    }
     this.size = newSize;
     this.pos.subVec(loc.mulNum(zoom));
   }
