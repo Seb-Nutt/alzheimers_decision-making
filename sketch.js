@@ -24,7 +24,7 @@ const OCCIPITAL = 2;
 const PARIETAL = 3;
 const FRONTAL = 4;
 const TEMPORAL = 5;
-let regionIDs = [BRAIN_STEM,CEREBELLUM,OCCIPITAL,PARIETAL,FRONTAL,TEMPORAL];
+let regionWriteUps;
 
 class BrainNode{
   constructor(x,y,z,region) {
@@ -56,6 +56,7 @@ class RegionButton{
     this.buttonHeight = 100;
     this.backgroundColorDeficit = 50;
     this.clicked = false;
+    this.titleSize = this.buttonHeight/3;
   }
 
   drawButton(opacity){
@@ -68,7 +69,7 @@ class RegionButton{
     fill(color(red(this.primaryColor)-this.backgroundColorDeficit,green(this.primaryColor)-this.backgroundColorDeficit,blue(this.primaryColor)-this.backgroundColorDeficit));
     rect(this.x,this.y,this.buttonWidth,this.buttonHeight);
     textAlign(CENTER);
-    textSize(this.buttonHeight/3);
+    textSize(this.titleSize);
     textFont(quicksandFont);
     fill(this.primaryColor,opacity);
     text(this.region, this.x + this.buttonWidth/2, this.y + this.buttonHeight/2);
@@ -84,19 +85,29 @@ class RegionButton{
 
   displayInfoChunk(){
     //textbox
+    orbitControl();
+    translate(0,0,0);
     fill(this.secondaryColor);
     stroke(this.primaryColor);
     box(width/2,height/2);
 
     //text
-    //update to plaace on top of the textbox
-    text(this.region,0,height/4);
+    
+    push();
+    translate(0,0,250);
+    fill(this.primaryColor);
+    text(this.region,0,-height/4 + this.titleSize);
+    textSize(this.titleSize/2);
+    
+    text(regionWriteUps[this.regionID],0,0);
+    pop();
   }
 }
 
 function preload() {
   nodePositions = loadStrings("assets/nodePositions.txt");
   quicksandFont = loadFont("assets/Quicksand-Regular.otf");
+  regionWriteUps = loadStrings("assets/regionWriteUps.txt");
 }
 
 
@@ -113,6 +124,7 @@ function setup() {
       nodePositions[node][coordinate] = float(nodePositions[node][coordinate]);
     }
   }
+
 
   regionButtons.push(new RegionButton(60,350,'Brain Stem',0));
   regionButtons.push(new RegionButton(-578, 91, 'Cerebellum',1));
@@ -203,10 +215,7 @@ function drawBrain(){
     else{
       buttonOpacity = 0;
     }
-
   }
-
-  ellipse(mouseX-width/2, mouseY-height/2, 3, 3);
 }
 
 function keyPressed(){
