@@ -44,10 +44,46 @@ class BrainNode{
   }
 }
 
-class RegionButton{
-  constructor(x,y,region,id){
+class Button{
+  constructor(x,y, buttonText, buttonColor){
     this.x = x;
     this.y = y;
+    this.buttonText = buttonText;
+    this.buttonColor = buttonColor;
+    this.hoveredColor = color(red(this.buttonColor)-100,green(this.buttonColor)-100,blue(this.buttonColor)-100);
+    this.buttonWidth = this.buttonText.length*20;
+    this.buttonHeight = 100;
+    this.backgroundColorDeficit = 50;
+    this.clicked = false;
+    this.titleSize = this.buttonHeight/3;
+  }
+  
+  drawButton(opacity){
+    stroke('white');
+
+    
+    fill(this.detectHovering() ? this.buttonColor : this.hoveredColor);
+
+    rect(this.x,this.y,this.buttonWidth,this.buttonHeight);
+    textAlign(CENTER);
+    textSize(this.titleSize);
+    textFont(quicksandFont);
+    fill(this.primaryColor,opacity);
+    text(this.buttonText, this.x + this.buttonWidth/2, this.y + this.buttonHeight/2);
+
+    if (this.clicked){
+      this.displayInfoChunk();
+    }
+  }
+
+  detectHovering(){
+    return this.x < mouseX-width/2 && this.y < mouseY-height/2 && this.x + this.buttonWidth > mouseX-width/2 && this.y + this.buttonHeight > mouseY- height/2;
+  }
+}
+
+class RegionButton extends Button{
+  constructor(x,y, buttonText, buttonColor, hoveredColor, region,id){
+    super(x,y, buttonText, buttonColor, hoveredColor)
     this.region = region;
     this.regionID = id;
     this.primaryColor = regionColors[this.regionID];
@@ -79,10 +115,6 @@ class RegionButton{
     }
   }
 
-  detectHovering(){
-    return this.x < mouseX-width/2 && this.y < mouseY-height/2 && this.x + this.buttonWidth > mouseX-width/2 && this.y + this.buttonHeight > mouseY- height/2;
-  }
-
   displayInfoChunk(){
     //textbox
     orbitControl();
@@ -97,9 +129,8 @@ class RegionButton{
     translate(0,0,250);
     fill(this.primaryColor);
     text(this.region,0,-height/4 + this.titleSize);
-    textSize(this.titleSize/2);
-    
-    text(regionWriteUps[this.regionID],0,0);
+    textSize(this.titleSize/1.5);
+    text(regionWriteUps[this.regionID],-width/4,-height/8,width/2);
     pop();
   }
 }
