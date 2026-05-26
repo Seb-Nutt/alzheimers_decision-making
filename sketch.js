@@ -30,7 +30,6 @@ let simulationButtons = [];
 const HOMEPAGE = 0;
 const IOWA_GAMBLING_TASK = 1;
 const PRISONERS_DILEMMA = 2;
-let workspace = HOMEPAGE;
 
 class BrainNode{
   constructor(x,y,z,region) {
@@ -128,7 +127,7 @@ class SimulationButton extends Button{
 
   triggerEffect(){
     if (this.id !== 'parent'){
-      workspace = this.id;
+      //go to the corresponding page
     }
   }
 }
@@ -157,7 +156,9 @@ function setup() {
   //create the parent simulation button
   parentSimulationButton = new SimulationButton(-19*width/39, -5*height/11,'Simulations',color(200),'parent');
 
+  //create the two simulation buttons that appear below the main one when selected
   simulationButtons.push(new SimulationButton(parentSimulationButton.x, parentSimulationButton.y + parentSimulationButton.buttonHeight*2, 'Iowa Gambling Task', color(150), IOWA_GAMBLING_TASK));
+  simulationButtons.push(new SimulationButton(parentSimulationButton.x, parentSimulationButton.y + parentSimulationButton.buttonHeight*4, 'Prisoners Dilemma', color(150), PRISONERS_DILEMMA));
 
   //create the buttons for each region of the brain
   regionButtons.push(new RegionButton(60,350,'Brain Stem', regionColors[BRAIN_STEM],BRAIN_STEM));
@@ -180,18 +181,18 @@ function setup() {
   }
 }
 
-function draw() { 
+function draw(){ 
   background(0);
-  if (workspace === HOMEPAGE){
-    drawBrain();
-    drawSimulationButtons();
-  }
+  drawBrain();
+  drawSimulationButtons();
 }
 
 
 function drawBrain(){
   const ROTATION_SPEED = 0.002;
   const ALIGNMENT_SPEED = 0.05;
+
+  push();
 
   brainRotationAngle %= 2*PI;
   //rotate the brain if a lobe is not being selected
@@ -242,6 +243,7 @@ function drawBrain(){
       buttonOpacity = 0;
     }
   }
+  pop();
 }
 
 function keyPressed(){
@@ -262,30 +264,27 @@ function mouseClicked(){
         button.clicked = false;
       }
     }
-    if (parentSimulationButton.detectHovering()){
-      parentSimulationButton.clicked = true;
-      parentSimulationButton.triggerEffect();
-    }
-    else{
-      parentSimulationButton.clicked = false;
-    }
+  }
+  if (parentSimulationButton.detectHovering()){
+    parentSimulationButton.clicked = true;
+    parentSimulationButton.triggerEffect();
+  }
+  else{
+    parentSimulationButton.clicked = false;
+  }
 
-    // for (let childButton of simulationButtons){
-    //   if (childButton.detectHovering){
-    //     childButton.triggerEffect();
-    //   }
-    // }
+  for (let childButton of simulationButtons){
+    if (childButton.detectHovering()){
+      childButton.triggerEffect();
+    }
   }
 }
 
 function drawSimulationButtons(){
-  push();
-  rotateY(0);
   parentSimulationButton.drawButton();
   if (parentSimulationButton.clicked){
     for (let childButton of simulationButtons){
       childButton.drawButton();
     }
   }
-  pop();
 }
