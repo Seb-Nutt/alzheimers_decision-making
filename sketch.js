@@ -30,7 +30,7 @@ let simulationButtons = [];
 const IOWA_GAMBLING_TASK = 0;
 const PRISONERS_DILEMMA = 1;
 let simulationLinks = ["gambling-task/index.html","prisoners-dilemma/index.html"];
-import {Button} from "assets/button.js";
+
 
 class BrainNode{
   constructor(x,y,z,region) {
@@ -46,52 +46,6 @@ class BrainNode{
     
     if (dist(this.x,this.y,this.z,otherNode.x,otherNode.y,otherNode.z) < this.NODE_CONNECTION_RANGE && (this.regionColor === otherNode.regionColor || !selectingLobe)){
       line(this.x,this.y,this.z,otherNode.x,otherNode.y,otherNode.z);
-    }
-  }
-}
-
-class RegionButton extends Button{
-  constructor(x,y, buttonText, buttonColor, id, hoveredColor, buttonWidth, buttonHeight, clicked){
-    super(x,y, buttonText, buttonColor, hoveredColor, buttonWidth, clicked, buttonHeight);
-    this.region = buttonText;
-    this.regionID = id;
-    this.buttonWidth = this.buttonText.length*20;
-    this.buttonHeight = 100;
-    this.backgroundColorDeficit = 50;
-    this.titleSize = this.buttonHeight/3;
-  }
-
-  triggerEffect(){
-    //textbox
-    translate(0,0,0);
-    fill(this.backgroundColor);
-    stroke(this.buttonColor);
-    box(width/2,height/2);
-
-    //text
-    push();
-    translate(0,0,250);
-    textAlign(CENTER);
-    fill(this.buttonColor);
-    textFont(quicksandFont);
-    textSize(this.titleSize);
-    text(this.region,0,-height/4 + this.titleSize);
-    textSize(this.titleSize/1.5);
-    text(regionWriteUps[this.regionID],-width/4,-height/8,width/2);
-    pop();
-  }
-}
-
-class SimulationButton extends Button{
-  constructor(x, y, buttonText, buttonColor, id, hoveredColor, buttonWidth, buttonHeight, clicked){
-    super(x, y, buttonText, buttonColor, hoveredColor, buttonWidth, buttonHeight, clicked);
-    this.id = id;
-  }
-
-  triggerEffect(){
-    if (this.id !== 'parent'){
-      //go to the corresponding page if the button is not the parent button
-      window.location.href = simulationLinks[this.id];
     }
   }
 }
@@ -118,19 +72,19 @@ function setup() {
   }
 
   //create the parent simulation button
-  parentSimulationButton = new SimulationButton(-19*width/39, -5*height/11,'Simulations',color(200),'parent');
+  parentSimulationButton = new ToggleButton(-19*width/39, -5*height/11,'Simulations',color(200),'parent');
 
   //create the two simulation buttons that appear below the main one when selected
-  simulationButtons.push(new SimulationButton(parentSimulationButton.x, parentSimulationButton.y + parentSimulationButton.buttonHeight*2, 'Iowa Gambling Task', color(150), IOWA_GAMBLING_TASK));
-  simulationButtons.push(new SimulationButton(parentSimulationButton.x, parentSimulationButton.y + parentSimulationButton.buttonHeight*4, 'Prisoners Dilemma', color(150), PRISONERS_DILEMMA));
+  simulationButtons.push(new RedirectButton(parentSimulationButton.x, parentSimulationButton.y + parentSimulationButton.buttonHeight*2, 'Iowa Gambling Task', color(150), simulationLinks[IOWA_GAMBLING_TASK]));
+  simulationButtons.push(new RedirectButton(parentSimulationButton.x, parentSimulationButton.y + parentSimulationButton.buttonHeight*4, 'Prisoners Dilemma', color(150), simulationLinks[PRISONERS_DILEMMA]));
 
   //create the buttons for each region of the brain
-  regionButtons.push(new RegionButton(60,350,'Brain Stem', regionColors[BRAIN_STEM],BRAIN_STEM));
-  regionButtons.push(new RegionButton(-578, 91, 'Cerebellum', regionColors[CEREBELLUM],CEREBELLUM));
-  regionButtons.push(new RegionButton(-665, -187, 'Occipital Lobe', regionColors[OCCIPITAL],OCCIPITAL));
-  regionButtons.push(new RegionButton(-220, -450, 'Parietal Lobe',regionColors[PARIETAL],PARIETAL));
-  regionButtons.push(new RegionButton(420, -355, 'Frontal Lobe', regionColors[FRONTAL],FRONTAL));
-  regionButtons.push(new RegionButton(130, 160, 'Temporal Lobe', regionColors[TEMPORAL],TEMPORAL));
+  regionButtons.push(new InformationButton(60,350,'Brain Stem', regionColors[BRAIN_STEM],BRAIN_STEM));
+  regionButtons.push(new InformationButton(-578, 91, 'Cerebellum', regionColors[CEREBELLUM],CEREBELLUM));
+  regionButtons.push(new InformationButton(-665, -187, 'Occipital Lobe', regionColors[OCCIPITAL],OCCIPITAL));
+  regionButtons.push(new InformationButton(-220, -450, 'Parietal Lobe',regionColors[PARIETAL],PARIETAL));
+  regionButtons.push(new InformationButton(420, -355, 'Frontal Lobe', regionColors[FRONTAL],FRONTAL));
+  regionButtons.push(new InformationButton(130, 160, 'Temporal Lobe', regionColors[TEMPORAL],TEMPORAL));
 
   for (node of nodePositions){
     //create the nodes and classify their region
