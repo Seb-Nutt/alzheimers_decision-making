@@ -79,12 +79,12 @@ function setup() {
   simulationButtons.push(new RedirectButton(parentSimulationButton.x, parentSimulationButton.y + parentSimulationButton.buttonHeight*4, 'Prisoners Dilemma', color(150), simulationLinks[PRISONERS_DILEMMA]));
 
   //create the buttons for each region of the brain
-  regionButtons.push(new InformationButton(60,350,'Brain Stem', regionColors[BRAIN_STEM],BRAIN_STEM));
-  regionButtons.push(new InformationButton(-578, 91, 'Cerebellum', regionColors[CEREBELLUM],CEREBELLUM));
-  regionButtons.push(new InformationButton(-665, -187, 'Occipital Lobe', regionColors[OCCIPITAL],OCCIPITAL));
-  regionButtons.push(new InformationButton(-220, -450, 'Parietal Lobe',regionColors[PARIETAL],PARIETAL));
-  regionButtons.push(new InformationButton(420, -355, 'Frontal Lobe', regionColors[FRONTAL],FRONTAL));
-  regionButtons.push(new InformationButton(130, 160, 'Temporal Lobe', regionColors[TEMPORAL],TEMPORAL));
+  regionButtons.push(new InformationButton(60,350,'Brain Stem', regionColors[BRAIN_STEM],regionWriteUps[BRAIN_STEM]));
+  regionButtons.push(new InformationButton(-578, 91, 'Cerebellum', regionColors[CEREBELLUM],regionWriteUps[CEREBELLUM]));
+  regionButtons.push(new InformationButton(-665, -187, 'Occipital Lobe', regionColors[OCCIPITAL],regionWriteUps[OCCIPITAL]));
+  regionButtons.push(new InformationButton(-220, -450, 'Parietal Lobe',regionColors[PARIETAL],regionWriteUps[PARIETAL]));
+  regionButtons.push(new InformationButton(420, -355, 'Frontal Lobe', regionColors[FRONTAL],regionWriteUps[FRONTAL]));
+  regionButtons.push(new InformationButton(130, 160, 'Temporal Lobe', regionColors[TEMPORAL],regionWriteUps[TEMPORAL]));
 
   for (node of nodePositions){
     //create the nodes and classify their region

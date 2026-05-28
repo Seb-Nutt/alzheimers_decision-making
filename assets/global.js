@@ -38,14 +38,16 @@ class Button{
 }
 
 class InformationButton extends Button{
-  constructor(x,y, buttonText, buttonColor, id, hoveredColor, buttonWidth, buttonHeight, clicked){
+  constructor(x,y, buttonText, buttonColor, contentText, hoveredColor, buttonWidth, buttonHeight, clicked){
     super(x,y, buttonText, buttonColor, hoveredColor, buttonWidth, clicked, buttonHeight);
-    this.region = buttonText;
-    this.regionID = id;
+    this.title = buttonText;
+    this.contentText = contentText;
     this.buttonWidth = this.buttonText.length*20;
     this.buttonHeight = 100;
     this.backgroundColorDeficit = 50;
     this.titleSize = this.buttonHeight/3;
+    this.webglXOffset = webglVersion !== 'p2d' ? 0 : width/2;
+    this.webglYOffset = webglVersion !== 'p2d' ? 0 : height/2;
   }
 
   triggerEffect(){
@@ -53,18 +55,27 @@ class InformationButton extends Button{
     translate(0,0,0);
     fill(this.backgroundColor);
     stroke(this.buttonColor);
-    box(width/2,height/2);
+    if (webglVersion !== 'p2d'){
+      box(width/2,height/2);
+    }
+    else{
+      rect(width/8,height/8, 3*width/4, 3*height/4);
+    }
+    
 
     //text
     push();
-    translate(0,0,250);
+    if (webglVersion !== 'p2d'){
+      translate(0,0,250);
+    }
+    console.log('working');
     textAlign(CENTER);
     fill(this.buttonColor);
     textFont(quicksandFont);
     textSize(this.titleSize);
-    text(this.region,0,-height/4 + this.titleSize);
+    text(this.title,0 + this.webglXOffset,-height/4 + this.titleSize + this.webglYOffset);
     textSize(this.titleSize/1.5);
-    text(regionWriteUps[this.regionID],-width/4,-height/8,width/2);
+    text(this.contentText,-width/4 + this.webglXOffset,-height/8 + this.webglYOffset,width/2);
     pop();
   }
 }
