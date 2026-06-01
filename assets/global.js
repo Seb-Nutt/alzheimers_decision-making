@@ -81,8 +81,8 @@ class InformationButton extends Button{
 }
 
 class ToggleButton extends Button{
-  constructor(x, y, buttonText, buttonColor, location, hoveredColor, buttonWidth, buttonHeight, clicked){
-    super(x, y, buttonText, buttonColor, location, hoveredColor, buttonWidth, buttonHeight, clicked);
+  constructor(x, y, buttonText, buttonColor, hoveredColor, buttonWidth, buttonHeight, clicked){
+    super(x, y, buttonText, buttonColor, hoveredColor, buttonWidth, buttonHeight, clicked);
   }
 
   triggerEffect(){

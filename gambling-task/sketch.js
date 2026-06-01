@@ -9,49 +9,81 @@ let quicksandFont;
 let INSTRUCTIONS;
 let INSTRUCTIONS_BUTTON;
 let buttons;
+let cards = {
+  a: null,
+  b: null,
+  c: null,
+  d: null
+};
+let remainingFlips = 10;
+
+let CARD_WIDTH = 250;
 
 class Card{
 
   constructor(x, y, cardWidth, cardHeight, gain, penalty, cardID){
-    this.FACE_DOWN = 0;
-    this.FACE_UP = 1;
+    this.selected = false;
     this.x = x;
     this.y = y;
     this.cardWidth = cardWidth;
     this.cardHeight = cardHeight;
     this.gain = gain;
     this.penalty = penalty;
-    this.side = FACE_DOWN;
+    this.side = this.FACE_DOWN;
     this.id = cardID;
+    this.CORNER_ROUNDING = 50;
+
+    this.selectionButton = new ToggleButton(this.x + this.cardWidth/2, this.y + 3*this.cardHeight/4, 'Select', color(150));
   }
 
   drawCard(){
-    if (this.side === this.FACE_DOWN){
+    fill(150);
+    stroke(255);
 
+    rect(this.x,this.y,this.cardWidth,this.cardHeight,this.CORNER_ROUNDING);
+
+    console.log(this.selectionButton.clicked);
+
+    if (!this.selectionButton.clicked){
+      text(this.id,this.x + this.cardWidth/2,this.y + this.cardHeight/2);
+
+      this.selectionButton.drawButton();
     }
     else{
+      setTimeout(this.flip(),3000);
 
+      console.log('wow');
     }
   }
 
-  getResult(){
-
+  flip(){
+    this.selected = !this.selected;
+    this.simulationButton.clicked = false;
   }
+
 }
 
 function preload(){
   quicksandFont = loadFont("../assets/Quicksand-Regular.otf");
-  INSTRUCTIONS = loadStrings("INSTRUCTIONS.txt");
+  INSTRUCTIONS = loadStrings("instructions.txt");
 }
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
   HOME_BUTTON = new RedirectButton(width/39, 9*height/11, " Home ",color(100),"../index.html");
   INSTRUCTIONS_BUTTON = new InformationButton(32*width/39, height/11, "Instructions", color(150), INSTRUCTIONS);
+
+  cards.a = new Card(width/4 - 3*CARD_WIDTH/2,height/4,CARD_WIDTH,height/2,100,150,'A');
+  cards.b = new Card(width/2 - 3*CARD_WIDTH/2, height/4, CARD_WIDTH, height/2, 100, 150, 'B');
+  cards.c = new Card(3*width/4 - 3*CARD_WIDTH/2, height/4, CARD_WIDTH, height/2, 50, 50, 'C');
+  cards.d = new Card(width - 3*CARD_WIDTH/2, height/4, CARD_WIDTH, height/2, 50, 50, 'D');
 }
 
 function draw() {
   background(0);
+  drawRemainingFlips();
+
+  drawCards();  
   drawMenuButtons();
 }
 
@@ -76,10 +108,30 @@ function mousePressed(){
     INSTRUCTIONS_BUTTON.clicked = true;
     INSTRUCTIONS_BUTTON.triggerEffect();
   }
-  console.log(mouseX,mouseY);
+
+  //go through and impliment checking for each card
+
+
+
+  // console.log(mouseX,mouseY);
 }
 
 function drawMenuButtons(){
   HOME_BUTTON.drawButton();
   INSTRUCTIONS_BUTTON.drawButton();
+}
+
+function drawCards(){
+  cards.a.drawCard();
+  cards.b.drawCard();
+  cards.c.drawCard();
+  cards.d.drawCard();
+}
+
+function drawRemainingFlips(){
+  let TEXTSIZE = 50;
+  stroke(255);
+  textAlign(LEFT);
+  textSize(TEXTSIZE);
+  text('Remaining Flips: ' + remainingFlips, 0, TEXTSIZE);
 }

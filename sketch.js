@@ -72,7 +72,7 @@ function setup() {
   }
 
   //create the parent simulation button
-  parentSimulationButton = new ToggleButton(-19*width/39, -5*height/11,'Simulations',color(200),'parent');
+  parentSimulationButton = new ToggleButton(-19*width/39, -5*height/11,'Simulations',color(200));
 
   //create the two simulation buttons that appear below the main one when selected
   simulationButtons.push(new RedirectButton(parentSimulationButton.x, parentSimulationButton.y + parentSimulationButton.buttonHeight*2, 'Iowa Gambling Task', color(150), simulationLinks[IOWA_GAMBLING_TASK]));
