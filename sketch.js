@@ -103,6 +103,7 @@ function draw(){
   background(0);
   drawBrain();
   drawSimulationButtons();
+  drawUI();
 }
 
 
@@ -204,5 +205,15 @@ function drawSimulationButtons(){
     for (let childButton of simulationButtons){
       childButton.drawButton();
     }
+  }
+}
+
+function drawUI(){
+  stroke(255);
+  textSize(50);
+  textAlign(CENTER);
+
+  if (!selectingLobe){
+    text("Press space to enter/exit selection mode!",0, -height/2 + 50);
   }
 }

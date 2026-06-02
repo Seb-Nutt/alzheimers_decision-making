@@ -16,13 +16,16 @@ let cards = {
   d: null
 };
 let remainingFlips = 10;
-
+let clickTime;
+let allowFlipping = true;
+let overallBalance = 0;
 let CARD_WIDTH = 250;
+let penalty;
+const TEXTSIZE = 50;
 
 class Card{
 
   constructor(x, y, cardWidth, cardHeight, gain, penalty, cardID){
-    this.selected = false;
     this.x = x;
     this.y = y;
     this.cardWidth = cardWidth;
@@ -33,32 +36,40 @@ class Card{
     this.id = cardID;
     this.CORNER_ROUNDING = 50;
 
-    this.selectionButton = new ToggleButton(this.x + this.cardWidth/2, this.y + 3*this.cardHeight/4, 'Select', color(150));
+    this.selectionButton = new ToggleButton(this.x + cardWidth/4, this.y + 3*this.cardHeight/4, 'Select', color(150));
   }
 
   drawCard(){
     fill(150);
     stroke(255);
 
+    textAlign(CENTER);
+
     rect(this.x,this.y,this.cardWidth,this.cardHeight,this.CORNER_ROUNDING);
 
-    console.log(this.selectionButton.clicked);
 
-    if (!this.selectionButton.clicked){
-      text(this.id,this.x + this.cardWidth/2,this.y + this.cardHeight/2);
 
-      this.selectionButton.drawButton();
+    if (this.selectionButton.clicked){
+      allowFlipping = false;
+
+      text("You have gained: " + this.gain, this.x, this.y + this.cardHeight/3, this.cardWidth);
+
+      if (penalty){
+        text("You have lost: " + this.penalty, this.x, this.y + 2*this.cardHeight/3, this.cardWidth);
+      }
+
+      if (millis() - clickTime > 3000){
+        this.selectionButton.clicked = false;
+        allowFlipping = true;
+      }
     }
     else{
-      setTimeout(this.flip(),3000);
+      text(this.id,this.x + this.cardWidth/2,this.y + this.cardHeight/2);
 
-      console.log('wow');
+      if (remainingFlips > 0){
+        this.selectionButton.drawButton();
+      }
     }
-  }
-
-  flip(){
-    this.selected = !this.selected;
-    this.simulationButton.clicked = false;
   }
 
 }
@@ -77,14 +88,15 @@ function setup() {
   cards.b = new Card(width/2 - 3*CARD_WIDTH/2, height/4, CARD_WIDTH, height/2, 100, 150, 'B');
   cards.c = new Card(3*width/4 - 3*CARD_WIDTH/2, height/4, CARD_WIDTH, height/2, 50, 50, 'C');
   cards.d = new Card(width - 3*CARD_WIDTH/2, height/4, CARD_WIDTH, height/2, 50, 50, 'D');
+
+  textSize(TEXTSIZE);
 }
 
 function draw() {
   background(0);
-  drawRemainingFlips();
-
   drawCards();  
   drawMenuButtons();
+  drawUI();
 }
 
 function mousePressed(){
@@ -111,6 +123,19 @@ function mousePressed(){
 
   //go through and impliment checking for each card
 
+  for (card of [cards.a,cards.b,cards.c,cards.d]){
+    if (card.selectionButton.detectHovering() && allowFlipping && remainingFlips > 0){
+
+      penalty = 50 > random(100);
+
+      overallBalance += card.gain - (penalty ? card.penalty: 0);
+
+      clickTime = millis();
+      remainingFlips--;
+      allowFlipping = false;
+      card.selectionButton.triggerEffect();
+    }
+  }
 
 
   // console.log(mouseX,mouseY);
@@ -129,9 +154,19 @@ function drawCards(){
 }
 
 function drawRemainingFlips(){
-  let TEXTSIZE = 50;
+  
+}
+
+function drawUI(){
   stroke(255);
   textAlign(LEFT);
-  textSize(TEXTSIZE);
   text('Remaining Flips: ' + remainingFlips, 0, TEXTSIZE);
+
+  textAlign(CENTER);
+  text('Balance: ' + overallBalance, width/2, height/8);
+
+  if (remainingFlips === 0){
+    text('Game Over! Check the instructions to see your results', width/2, 7*height/8);
+  }
 }
+

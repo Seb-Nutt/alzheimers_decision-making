@@ -68,7 +68,6 @@ class InformationButton extends Button{
     if (webglVersion !== 'p2d'){
       translate(0,0,250);
     }
-    console.log('working');
     textAlign(CENTER);
     fill(this.buttonColor);
     textFont(quicksandFont);
