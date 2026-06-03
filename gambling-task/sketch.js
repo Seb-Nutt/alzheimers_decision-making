@@ -111,18 +111,6 @@ function mousePressed(){
     }
   }
 
-
-  if (HOME_BUTTON.detectHovering()){
-    HOME_BUTTON.triggerEffect();
-  }
-
-  if (INSTRUCTIONS_BUTTON.detectHovering()){
-    INSTRUCTIONS_BUTTON.clicked = true;
-    INSTRUCTIONS_BUTTON.triggerEffect();
-  }
-
-  //go through and impliment checking for each card
-
   for (card of [cards.a,cards.b,cards.c,cards.d]){
     if (card.selectionButton.detectHovering() && allowFlipping && remainingFlips > 0){
 

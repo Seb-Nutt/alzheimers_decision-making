@@ -17,7 +17,7 @@ class Button{
     stroke('white');
 
     fill(this.detectHovering() ? this.hoveredColor : this.backgroundColor,opacity);
-    rect(this.x,this.y,this.buttonWidth,this.buttonHeight);
+    rect(this.x,this.y,this.buttonWidth,this.buttonHeight,50);
     textAlign(CENTER);
     textSize(this.titleSize);
     textFont(quicksandFont);
