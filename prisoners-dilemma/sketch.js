@@ -18,12 +18,15 @@ let player;
 let opponentChosen;
 let opponentDefined;
 const TITLE_SIZE = 50;
-const STAY_SILENT = 0;
-const SNITCH = 1;
+const COOPERATE = 0;
+const STEAL = 1;
 let prisonerImg;
-let snitchButton;
-let staySilentButton;
+let coinImg;
+let stealButton;
+let cooperateButton;
 let actionable = false;
+let atCenter = false;
+let resultCalculated = false;
 
 class Participant{
   constructor(type){
@@ -31,49 +34,79 @@ class Participant{
     this.x = width/3;
     this.TEXT_SIZE = 20;
     this.choice;
-    this.imageHeight = 300;
-    this.imageWidth = 200;
+    this.prisonerHeight = 300;
+    this.prisonerWidth = 200;
     this.movementDirection = 1;
+    this.points = 0;
+    this.hasCoin = true;
   }
 
   drawParticipant(){
     textAlign(CENTER);
-    text(this.type,this.x, height/2 - this.imageHeight);
-    image(prisonerImg, this.x - this.imageWidth/2, height/2 - this.imageHeight/2,this.imageWidth,this.imageHeight);
+    text(this.type,this.x, height/2 - this.prisonerHeight);
+    image(prisonerImg, this.x - this.prisonerWidth/2, height/2 - this.prisonerHeight/2,this.prisonerWidth,this.prisonerHeight);
+
+    if (this.hasCoin){
+      if (this.type === "Player"){
+        image(coinImg, this.x, height/2 - this.prisonerHeight/2,100,100);
+      }
+      else{
+        image(coinImg, this.x - this.prisonerWidth/2, height/2 - this.prisonerHeight/2,100,100);
+      }
+    }
+
+    text(this.points,this.x,height/2 + this.prisonerHeight/2);
   }
 
-  moveParticipant(){
-    if (Math.abs(width/2 - this.x) > 50){
-      this.x -= 1*this.movementDirection;
+  moveParticipant(goal){
+    if (goal === width/2){
+      this.x += 2*this.movementDirection;
     }
+    else if(goal - this.x !== 0){
+      this.x -= 2*this.movementDirection;
+    }
+    else{
+      actionable = true;
+      resultCalculated = false;
+      this.hasCoin = true;
+    }
+    atCenter = Math.abs(width/2 - this.x) < 100;
+  }
+
+  drawDecision(){
+    text(this.choice, this.x, height/2 + this.prisonerHeight*2);
   }
 }
 
 class Opponent extends Participant{
-  constructor(TEXT_SIZE, imageHeight, imageWidth, type){
-    super(TEXT_SIZE, imageHeight, imageWidth, type);
+  constructor(TEXT_SIZE, prisonerHeight, prisonerWidth, type, points, hasCoin){
+    super(TEXT_SIZE, prisonerHeight, prisonerWidth, type, points, hasCoin);
     this.x = 2*width/3;
     this.choice;
     this.betrayed = false;
-    this.movementMultiplier = -1;
+    this.movementDirection = -1;
   }
 
   decideMove(){
     if (this.type === "Alzhiemer's"){
-      this.choice = SNITCH;
+      this.choice = STEAL;
     }
     else{
       if (turnCount === 0){
-        this.choice = STAY_SILENT;
+        this.choice = COOPERATE;
       }
       else{
+
+        if (previousChoice === STEAL){
+          this.betrayed = true;
+        }
+
         if (this.betrayed){
           if (random(100) > 66){
             this.betrayed = false;
           }
-          this.choice = SNITCH;
+          this.choice = STEAL;
         }
-
         else{
           this.choice = previousChoice;
         }
@@ -87,6 +120,7 @@ function preload(){
   INSTRUCTIONS = loadStrings('instructions.txt');
   quicksandFont = loadFont("../assets/Quicksand-Regular.otf");
   prisonerImg = loadImage("../assets/prisoner.png");
+  coinImg = loadImage("../assets/coin.png");
 }
 
 function setup() {
@@ -100,8 +134,8 @@ function setup() {
 
   player = new Participant("Player");
 
-  snitchButton = new ToggleButton(width/3 - "Snitch".length * 10, 3*height/4 - TITLE_SIZE, "Snitch", color(100));
-  staySilentButton = new ToggleButton(2*width/3 - "Stay Silent".length * 10, 3*height/4 - TITLE_SIZE, "Stay Silent", color(200));
+  stealButton = new ToggleButton(width/3 - "Steal".length * 10, 3*height/4 - TITLE_SIZE, "Steal", color(100));
+  cooperateButton = new ToggleButton(2*width/3 - "Cooperate".length * 10, 3*height/4 - TITLE_SIZE, "Cooperate", color(200));
 
   selectionButtons.push(alzhiemersButton);
   selectionButtons.push(controlButton);
@@ -109,9 +143,9 @@ function setup() {
 
 function draw() {
   background(0);
-  drawMenuButtons();
   drawSelectionButtons();
-  runSimulation();
+  runSimulation();  
+  drawMenuButtons();
 }
 
 function drawMenuButtons(){
@@ -121,7 +155,7 @@ function drawMenuButtons(){
 
 function mouseClicked(){
   let uiButtons = [HOME_BUTTON, INSTRUCTIONS_BUTTON];
-  let actionButtons = [snitchButton, staySilentButton];
+  let actionButtons = [stealButton, cooperateButton];
   for (let button of uiButtons){
     if (button.detectHovering()){
       button.clicked = !button.clicked;
@@ -144,6 +178,13 @@ function mouseClicked(){
       button.triggerEffect();
       actionable = false;
       opponent.decideMove();
+      previousChoice = player.choice;
+      if (button === stealButton){
+        player.choice = STEAL;
+      }
+      else{
+        player.choice = COOPERATE;
+      }
     }
   }
 }
@@ -157,6 +198,7 @@ function drawSelectionButtons(){
 }
 
 function runSimulation(){
+
   if (opponentChosen){
     if (!opponentDefined){
       if (alzhiemersButton.clicked){
@@ -172,16 +214,48 @@ function runSimulation(){
     opponent.drawParticipant();
 
     if (actionable){
-      snitchButton.drawButton();
-      staySilentButton.drawButton();
+      stealButton.drawButton();
+      cooperateButton.drawButton();
       textAlign(CENTER);
       text("Or", width/2, 3*height/4);
     }
 
-    else{
-      player.moveParticipant();
-      opponent.moveParticipant();
+    else if (!atCenter && !resultCalculated){
+      player.moveParticipant(width/2);
+      opponent.moveParticipant(width/2);
     }
 
+    else if (atCenter && !resultCalculated){
+      getResult();
+    }
+
+    else{
+      player.moveParticipant(width/3);
+      opponent.moveParticipant(2*width/3);
+    }
   }
+}
+
+function getResult(){
+  if (player.choice === STEAL){
+    if (opponent.choice === COOPERATE){
+      opponent.hasCoin = false;
+      player.points += 3;
+      opponent.points -= 1;
+    }
+  }
+  else{
+    player.hasCoin = false;
+    if (opponent.choice === STEAL){
+      opponent.points += 3;
+      player.points -= 1;
+    }
+
+    else{
+      opponent.hasCoin = false;
+      opponent.points += 2;
+      player.points += 2;
+    }
+  }
+  resultCalculated = true;
 }
