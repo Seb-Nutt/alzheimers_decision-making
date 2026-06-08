@@ -13,15 +13,15 @@ class Button{
     this.titleSize = this.buttonHeight/3;
   }
   
-  drawButton(opacity){
+  drawButton(){
     stroke('white');
 
-    fill(this.detectHovering() ? this.hoveredColor : this.backgroundColor,opacity);
+    fill(this.detectHovering() ? this.hoveredColor : this.backgroundColor);
     rect(this.x,this.y,this.buttonWidth,this.buttonHeight,50);
     textAlign(CENTER);
     textSize(this.titleSize);
     textFont(quicksandFont);
-    fill(this.buttonColor,opacity);
+    fill(this.buttonColor);
     text(this.buttonText, this.x + this.buttonWidth/2, this.y + this.buttonHeight/2);
 
     if (this.clicked){

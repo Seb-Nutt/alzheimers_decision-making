@@ -65,14 +65,14 @@ class Participant{
       this.x += 2*this.movementDirection;
     }
     else if(goal - this.x !== 0){
-      this.x -= 2*this.movementDirection;
+      this.x -= 2* this.movementDirection;
       if (this.choice === STEAL){
         stroke(100);
         text("Steal!", this.x, height/2 + this.prisonerHeight);
       }
       else{
         stroke(200);
-        text("Cooperate", this.x, height/2 + this.prisonerHeight)
+        text("Cooperate", this.x, height/2 + this.prisonerHeight);
       }
     }
     else{
@@ -128,7 +128,7 @@ class Opponent extends Participant{
 
 function preload(){
   INSTRUCTIONS = loadStrings('instructions.txt');
-  CONCLUSION = loadStrings('conclusion.txt')
+  CONCLUSION = loadStrings('conclusion.txt');
   quicksandFont = loadFont("../assets/Quicksand-Regular.otf");
   prisonerImg = loadImage("../assets/prisoner.png");
   coinImg = loadImage("../assets/coin.png");
@@ -139,7 +139,7 @@ function setup() {
   textFont(quicksandFont);
   HOME_BUTTON = new RedirectButton(width/39, 9*height/11, " Home ",color(100),"../index.html");
   INSTRUCTIONS_BUTTON = new InformationButton(32*width/39, height/11, "Instructions", color(150), INSTRUCTIONS);
-  CONCLUSION_BUTTON = new InformationButton(32*width/39, 5*height/6, "Conclusion", color(150), CONCLUSION)
+  CONCLUSION_BUTTON = new InformationButton(32*width/39, 5*height/6, "Conclusion", color(150), CONCLUSION);
 
   alzhiemersButton = new ToggleButton(width/3 - "Alzhiemer's Group".length * 10, height/2 - TITLE_SIZE, "Alzhiemer's Group", color(200));
   controlButton = new ToggleButton(2*width/3 - "Control Group".length*10, height/2 - TITLE_SIZE, "Control Group", color(200));

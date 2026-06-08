@@ -1,11 +1,11 @@
-// Alzhiermers and decision making
+// Alzhiemers and decision making
 // Your Name
 // Date
 //
 // Extra for Experts:
 // - describe what you did to take this project "above and beyond"
 
-
+//Global variables
 let brainNodes = [];
 let regionColors;
 let regionNodes = [[],[],[],[],[],[]];
@@ -147,22 +147,15 @@ function drawBrain(){
       }
     }
 
-    if (selectingLobe){
-      if (brainRotationAngle === 0 && buttonOpacity <= 100){
-        buttonOpacity += 0.05;
-      }
-
-      for (let button of regionButtons){
-        button.drawButton(buttonOpacity);
-      }
-
-    }
-
-    else{
-      buttonOpacity = 0;
-    }
+    
   }
   pop();
+
+  if (selectingLobe){
+    for (let button of regionButtons){
+      button.drawButton(buttonOpacity);
+    }
+  }
 }
 
 function keyPressed(){
@@ -172,7 +165,6 @@ function keyPressed(){
 }
 
 function mouseClicked(){
-  console.log(mouseX,mouseY);
   if (selectingLobe){
     for (let button of regionButtons){
       if (button.detectHovering()){
@@ -184,19 +176,18 @@ function mouseClicked(){
       }
     }
   }
+  for (let childButton of simulationButtons){
+    if (childButton.detectHovering() && parentSimulationButton.clicked){
+      childButton.triggerEffect();
+    }
+  }
   if (parentSimulationButton.detectHovering()){
-    parentSimulationButton.clicked = true;
     parentSimulationButton.triggerEffect();
   }
   else{
     parentSimulationButton.clicked = false;
   }
 
-  for (let childButton of simulationButtons){
-    if (childButton.detectHovering()){
-      childButton.triggerEffect();
-    }
-  }
 }
 
 function drawSimulationButtons(){
@@ -209,11 +200,12 @@ function drawSimulationButtons(){
 }
 
 function drawUI(){
+  let titleSize = 50;
   stroke(255);
-  textSize(50);
+  textSize(titleSize);
   textAlign(CENTER);
 
   if (!selectingLobe){
-    text("Press space to enter/exit selection mode!",0, -height/2 + 50);
+    text("Press space to enter/exit selection mode!",0, -height/2 + titleSize);
   }
 }
