@@ -1,1 +1,1 @@
-This is where the instructions will go
+This is a simulation of the moral problem known as the prisoners dilemma. In this problem the two participants (you and an algorithm) have the choice to either cooperate or steal from the other without their decision being shared until both decisions are made. If both participants choose to cooperate then both are rewarded with two points. If one participant chooses to steal then they are rewarded with three points and thier opponent recives a penalty of -1. If both players choose to steal then neither recive anything.

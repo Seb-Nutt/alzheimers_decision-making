@@ -48,6 +48,7 @@ class InformationButton extends Button{
     this.titleSize = this.buttonHeight/3;
     this.webglXOffset = webglVersion !== 'p2d' ? 0 : width/2;
     this.webglYOffset = webglVersion !== 'p2d' ? 0 : height/2;
+    this.contentSizeDivisor = 1.55;
   }
 
   triggerEffect(){
@@ -73,7 +74,7 @@ class InformationButton extends Button{
     textFont(quicksandFont);
     textSize(this.titleSize);
     text(this.title,0 + this.webglXOffset,-height/4 + this.titleSize + this.webglYOffset);
-    textSize(this.titleSize/1.5);
+    textSize(this.titleSize/this.contentSizeDivisor);
     text(this.contentText,-width/4 + this.webglXOffset,-height/8 + this.webglYOffset,width/2);
     pop();
   }

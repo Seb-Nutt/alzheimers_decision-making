@@ -8,6 +8,8 @@ let HOME_BUTTON;
 let quicksandFont;
 let INSTRUCTIONS;
 let INSTRUCTIONS_BUTTON;
+let CONCLUSION;
+let CONCLUSION_BUTTON;
 let buttons;
 let cards = {
   a: null,
@@ -15,7 +17,7 @@ let cards = {
   c: null,
   d: null
 };
-let remainingFlips = 10;
+let remainingFlips = 100;
 let clickTime;
 let allowFlipping = true;
 let overallBalance = 0;
@@ -58,7 +60,7 @@ class Card{
         text("You have lost: " + this.penalty, this.x, this.y + 2*this.cardHeight/3, this.cardWidth);
       }
 
-      if (millis() - clickTime > 3000){
+      if (millis() - clickTime > 1000){
         this.selectionButton.clicked = false;
         allowFlipping = true;
       }
@@ -77,15 +79,17 @@ class Card{
 function preload(){
   quicksandFont = loadFont("../assets/Quicksand-Regular.otf");
   INSTRUCTIONS = loadStrings("instructions.txt");
+  CONCLUSION = loadStrings("conclusion.txt");
 }
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
   HOME_BUTTON = new RedirectButton(width/39, 9*height/11, " Home ",color(100),"../index.html");
   INSTRUCTIONS_BUTTON = new InformationButton(32*width/39, height/11, "Instructions", color(150), INSTRUCTIONS);
+  CONCLUSION_BUTTON = new InformationButton(32*width/39, 5*height/6, "Conclusion", color(150), CONCLUSION)
 
-  cards.a = new Card(width/4 - 3*CARD_WIDTH/2,height/4,CARD_WIDTH,height/2,100,150,'A');
-  cards.b = new Card(width/2 - 3*CARD_WIDTH/2, height/4, CARD_WIDTH, height/2, 100, 150, 'B');
+  cards.a = new Card(width/4 - 3*CARD_WIDTH/2,height/4,CARD_WIDTH,height/2,100, 250,'A');
+  cards.b = new Card(width/2 - 3*CARD_WIDTH/2, height/4, CARD_WIDTH, height/2, 100, 250, 'B');
   cards.c = new Card(3*width/4 - 3*CARD_WIDTH/2, height/4, CARD_WIDTH, height/2, 50, 50, 'C');
   cards.d = new Card(width - 3*CARD_WIDTH/2, height/4, CARD_WIDTH, height/2, 50, 50, 'D');
 
@@ -100,7 +104,7 @@ function draw() {
 }
 
 function mousePressed(){
-  let buttons = [HOME_BUTTON,INSTRUCTIONS_BUTTON];
+  let buttons = [HOME_BUTTON, INSTRUCTIONS_BUTTON, CONCLUSION_BUTTON];
   for (let button of buttons){
     if (button.detectHovering()){
       button.clicked = !button.clicked;
@@ -132,6 +136,7 @@ function mousePressed(){
 function drawMenuButtons(){
   HOME_BUTTON.drawButton();
   INSTRUCTIONS_BUTTON.drawButton();
+  CONCLUSION_BUTTON.drawButton();
 }
 
 function drawCards(){

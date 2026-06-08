@@ -1,1 +1,1 @@
-Wow this is where the instructions will go
+The iowa gambling task tracks the possible gain over the course of multiple rounds of selection. The cards present all have a set amount that you gain every time they are selected while also having an attached penalty that you will recieve 50% of the time. The cards A and B have a reward of 100 and a penalty of 250 while the cards C and D have a reward of 50 and a penalty of 50. Your goal is to accumulate the maximum score over the course of 10 flips.
