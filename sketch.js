@@ -16,8 +16,8 @@ let regionButtons = [];
 let quicksandFont;
 let buttonOpacity;
 let selectedRegion;
-const DEFAULT_WIDTH = 1912;
-const DEFAULT_HEIGHT = 948;
+// const DEFAULT_WIDTH = 1912;
+// const DEFAULT_HEIGHT = 948;
 const BRAIN_STEM = 0;
 const CEREBELLUM = 1;
 const OCCIPITAL = 2;
@@ -42,8 +42,7 @@ class BrainNode{
   }
 
   connect(otherNode){
-    //use a scale
-    
+    //connect the node the other node if in range and in selection mode
     if (dist(this.x,this.y,this.z,otherNode.x,otherNode.y,otherNode.z) < this.NODE_CONNECTION_RANGE && (this.regionColor === otherNode.regionColor || !selectingLobe)){
       line(this.x,this.y,this.z,otherNode.x,otherNode.y,otherNode.z);
     }
@@ -51,6 +50,7 @@ class BrainNode{
 }
 
 function preload() {
+  //load the assets needed
   nodePositions = loadStrings("assets/nodePositions.txt");
   quicksandFont = loadFont("assets/Quicksand-Regular.otf");
   regionWriteUps = loadStrings("assets/regionWriteUps.txt");
@@ -59,11 +59,11 @@ function preload() {
 
 function setup() {
   createCanvas(windowWidth, windowHeight, WEBGL);
-  scale(width/DEFAULT_WIDTH,height/DEFAULT_HEIGHT);
 
+  //define the colors for each section of the brain to be used when selecting a lobe
   regionColors = [color(150), color(200,0,0), color(200,200,0), color(0,200,0), color(0,200,200), color(0,0,200)];
 
-  //changing the string posisions into numbers
+  //changing the string posisions into numbers from the node positions
   for (let node = 0; node < nodePositions.length; node++){
     nodePositions[node] = nodePositions[node].split(" ");
     for (let coordinate = 0; coordinate < nodePositions[node].length; coordinate++){
@@ -101,6 +101,7 @@ function setup() {
 
 function draw(){ 
   background(0);
+  //constantly draw the nessessary elements
   drawBrain();
   drawSimulationButtons();
   drawUI();
@@ -187,7 +188,6 @@ function mouseClicked(){
   else{
     parentSimulationButton.clicked = false;
   }
-
 }
 
 function drawSimulationButtons(){
