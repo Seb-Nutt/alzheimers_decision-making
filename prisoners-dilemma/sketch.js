@@ -1,9 +1,4 @@
-// Project Title
-// Your Name
-// Date
-//
-// Extra for Experts:
-// - describe what you did to take this project "above and beyond"
+// The Prisoners Dilemma
 
 let HOME_BUTTON;
 let INSTRUCTIONS;
@@ -29,6 +24,7 @@ let atCenter = false;
 let resultCalculated = false;
 let CONCLUSION_BUTTON;
 let CONCLUSION;
+const TURN_LIMIT = 10;
 
 class Participant{
   constructor(type){
@@ -162,7 +158,7 @@ function draw() {
 
 function drawUIElements(){
   //display the run count
-  text("Remaing turns: " + (10 - turnCount), width/2, height/4);
+  text("Remaining turns: " + (TURN_LIMIT - turnCount), width/2, height/4);
   HOME_BUTTON.drawButton();
   INSTRUCTIONS_BUTTON.drawButton();
   CONCLUSION_BUTTON.drawButton();
@@ -189,7 +185,7 @@ function mouseClicked(){
   }
 
   for (let button of actionButtons){
-    if (button.detectHovering() && turnCount < 10 && actionable){
+    if (button.detectHovering() && turnCount < TURN_LIMIT && actionable){
       button.triggerEffect();
       actionable = false;
       previousChoice = player.choice;
@@ -236,10 +232,12 @@ function runSimulation(){
 
     //prompt the user with a choice if they are at their starting point and have not already chosen
     if (actionable){
-      stealButton.drawButton();
-      cooperateButton.drawButton();
-      textAlign(CENTER);
-      text("Or", width/2, 3*height/4);
+      if (turnCount < TURN_LIMIT){
+        stealButton.drawButton();
+        cooperateButton.drawButton();
+        textAlign(CENTER);
+        text("Or", width/2, 3*height/4);
+      }
     }
 
     //if the player has chosen then move both them and thier opponent to the center

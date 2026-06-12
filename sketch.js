@@ -18,8 +18,6 @@ let regionButtons = [];
 let quicksandFont;
 let buttonOpacity;
 let selectedRegion;
-// const DEFAULT_WIDTH = 1912;
-// const DEFAULT_HEIGHT = 948;
 const BRAIN_STEM = 0;
 const CEREBELLUM = 1;
 const OCCIPITAL = 2;

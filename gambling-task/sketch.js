@@ -1,9 +1,4 @@
 // Iowa Gambling Task
-// Your Name
-// Date
-//
-// Extra for Experts:
-// - describe what you did to take this project "above and beyond"
 
 //global variables
 let HOME_BUTTON;
@@ -93,7 +88,7 @@ function setup() {
   //create the UI buttons
   HOME_BUTTON = new RedirectButton(width/39, 9*height/11, " Home ",color(100),"../index.html");
   INSTRUCTIONS_BUTTON = new InformationButton(32*width/39, height/11, "Instructions", color(150), INSTRUCTIONS);
-  CONCLUSION_BUTTON = new InformationButton(32*width/39, 5*height/6, "Conclusion", color(150), CONCLUSION)
+  CONCLUSION_BUTTON = new InformationButton(32*width/39, 5*height/6, "Conclusion", color(150), CONCLUSION);
 
   //define the four cards
   cards.a = new Card(width/4 - 3*CARD_WIDTH/2,height/4,CARD_WIDTH,height/2,100, 250,'A');
@@ -132,7 +127,7 @@ function mousePressed(){
       rolledPenalty = 50 > random(100);
 
       //update the users balance
-      overallBalance += card.gain - (penalty ? card.penalty: 0);
+      overallBalance += card.gain - (rolledPenalty ? card.penalty: 0);
 
       //set a reference time to determine when the one second timer for each flip is up
       clickTime = millis();
