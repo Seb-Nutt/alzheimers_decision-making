@@ -1,9 +1,11 @@
-// Alzhiemers and decision making
-// Your Name
-// Date
+// Alzhiemer's disease and decision making - CS30 Major Project
+// Sebastian Nutt
+// June 12th 2026
 //
 // Extra for Experts:
-// - describe what you did to take this project "above and beyond"
+// - I used a global file to contain my button class which spanned over the multiple pages that were used
+// - These multiple pages were also implimented in a way that allowed for optimisation due to not loading all three pages at once
+// - I implimented my outside research into multiple simulations while presenting information in a way that doesnt force it in your face
 
 //Global variables
 let brainNodes = [];
