@@ -162,7 +162,7 @@ function draw() {
 
 function drawUIElements(){
   //display the run count
-  text("Turn number: " + turnCount, width/2, height/4);
+  text("Remaing turns: " + (10 - turnCount), width/2, height/4);
   HOME_BUTTON.drawButton();
   INSTRUCTIONS_BUTTON.drawButton();
   CONCLUSION_BUTTON.drawButton();
@@ -189,7 +189,7 @@ function mouseClicked(){
   }
 
   for (let button of actionButtons){
-    if (button.detectHovering()){
+    if (button.detectHovering() && turnCount < 10 && actionable){
       button.triggerEffect();
       actionable = false;
       previousChoice = player.choice;
@@ -200,13 +200,13 @@ function mouseClicked(){
       else{
         player.choice = COOPERATE;
       }
-
       turnCount++;
     }
   }
 }
 
 function drawSelectionButtons(){
+  // draw the initial selection of an opponent with alzhiemers and an opponent without
   for (let button of selectionButtons){
     if (!controlButton.clicked && !alzhiemersButton.clicked){
       button.drawButton();
@@ -215,8 +215,10 @@ function drawSelectionButtons(){
 }
 
 function runSimulation(){
-
+  //only run the simulation if the  opponent has been chosen
   if (opponentChosen){
+
+    //define the opponent on the first run through of the simulation
     if (!opponentDefined){
       if (alzhiemersButton.clicked){
         opponent = new Opponent("Alzhiemer's");
@@ -227,9 +229,12 @@ function runSimulation(){
       opponentDefined = true;
       actionable = true;
     }
+
+    //draw both participants
     player.drawParticipant();
     opponent.drawParticipant();
 
+    //prompt the user with a choice if they are at their starting point and have not already chosen
     if (actionable){
       stealButton.drawButton();
       cooperateButton.drawButton();
@@ -237,15 +242,18 @@ function runSimulation(){
       text("Or", width/2, 3*height/4);
     }
 
+    //if the player has chosen then move both them and thier opponent to the center
     else if (!atCenter && !resultCalculated){
       player.moveParticipant(width/2);
       opponent.moveParticipant(width/2);
     }
 
+    //if they are at the center then make the opponent choose their decision
     else if (atCenter && !resultCalculated){
       getResult();
     }
 
+    //move back to the starting positions
     else{
       player.moveParticipant(width/3);
       opponent.moveParticipant(2*width/3);
@@ -254,6 +262,7 @@ function runSimulation(){
 }
 
 function getResult(){
+  //calculate the result based on the two choices and remove the cooresponding coin if that participant chose cooperate
   if (player.choice === STEAL){
     if (opponent.choice === COOPERATE){
       opponent.hasCoin = false;

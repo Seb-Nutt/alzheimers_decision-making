@@ -109,33 +109,37 @@ function draw(){
 
 
 function drawBrain(){
+  //define the rotaion speed and speed of which the brain realigns itself
   const ROTATION_SPEED = 0.002;
   const ALIGNMENT_SPEED = 0.05;
 
+  //apply the rotation to only the brain
   push();
 
+  //ensure that the realignment system doesnt do any uneccesary rotations
   brainRotationAngle %= 2*PI;
-  //rotate the brain if a lobe is not being selected
+
   if (selectingLobe){
-    //rotate the brain back into position
+    //realign the brain when entering selection mode
     if (brainRotationAngle > 0){
       brainRotationAngle -= ALIGNMENT_SPEED;
     }
     else{
+      //lock the brain in place once it is realigned
       brainRotationAngle = 0;
     }
-
-    rotateY(brainRotationAngle);
   }
   else{
     brainRotationAngle += ROTATION_SPEED;
-    rotateY(brainRotationAngle);
   }
+
+  //apply the rotation
+  rotateY(brainRotationAngle);
 
   for (node of brainNodes){
     for (otherNode of brainNodes){
 
-      //if selecting a lobe then color the regions
+      //if selecting a lobe then color the lines
       if (selectingLobe){
         stroke(node.regionColor);
       }
@@ -143,6 +147,7 @@ function drawBrain(){
         stroke(255);
       }
 
+      //connect the nodes together to form the wireframe model
       if (node !== otherNode){
         node.connect(otherNode);
       }
@@ -150,8 +155,10 @@ function drawBrain(){
 
     
   }
+  //finish applying changes to only the model
   pop();
 
+  //draw the information buttons if selecting a lobe
   if (selectingLobe){
     for (let button of regionButtons){
       button.drawButton(buttonOpacity);
@@ -160,12 +167,14 @@ function drawBrain(){
 }
 
 function keyPressed(){
+  //go into or out of selection mode when space is pressed
   if (key === ' '){
     selectingLobe = !selectingLobe;
   }
 }
 
 function mouseClicked(){
+  //check if any of the information buttons were pressed and if so display their information
   if (selectingLobe){
     for (let button of regionButtons){
       if (button.detectHovering()){
@@ -177,11 +186,15 @@ function mouseClicked(){
       }
     }
   }
+
+  //go to the corresponding simulation if the button is pressed when the dropdown menu is open
   for (let childButton of simulationButtons){
     if (childButton.detectHovering() && parentSimulationButton.clicked){
       childButton.triggerEffect();
     }
   }
+
+  //toggle the dropdown menu if clicked and close it if clicked elsewhere
   if (parentSimulationButton.detectHovering()){
     parentSimulationButton.triggerEffect();
   }
@@ -191,6 +204,7 @@ function mouseClicked(){
 }
 
 function drawSimulationButtons(){
+  //drw the simulationms main button regardless and the dropdown ones if the main button is clicked
   parentSimulationButton.drawButton();
   if (parentSimulationButton.clicked){
     for (let childButton of simulationButtons){
@@ -206,6 +220,8 @@ function drawUI(){
   textAlign(CENTER);
 
   if (!selectingLobe){
-    text("Press space to enter/exit selection mode!",0, -height/2 + titleSize);
+    //draw elements that only appear when not in lobe selection mode
+    text("Press space to enter/exit selection mode!", 0, height/2 - titleSize);
+    text("Alzhiemer's Disease and How it Affects Decision-Making", 0, -height/2 + titleSize);
   }
 }

@@ -1,13 +1,13 @@
 # CS30 Major Project Beta Testing
 ## Expirianced Coder - Arden Aboussanar
 ### Could Improve:
-- The performance on the main page
+- The performance on the main page - Fixed
 - The text scaled weirdly on the laptop used for testing
-- Some buttons overlapped which made functions confusing
+- Some buttons overlapped which made functions confusing - Fixed
 - Confusing in some simulations
-- Base descriptions and title missing from main page
-- Bugs in the simulations such as increasing turn count when not selected
-- Impliment a turn limit for the prisoners dilemma
+- Base descriptions and title missing from main page - Title implimented
+- Bugs in the simulations such as increasing turn count when not selected - Fixed
+- Impliment a turn limit for the prisoners dilemma - Done
 ### Liked:
 - Cool concept
 - The model on the home page was well done
@@ -18,7 +18,7 @@
 - Engaging simulations
 ## Inexpirianced Coder - Archie Mcgraff
 ### Could Improve:
-- Runs poorly on the main page
+- Runs poorly on the main page - Fixed
 - Text scales weirdly
 - Instructions are out of the way and should be more in your face
 ### Liked:

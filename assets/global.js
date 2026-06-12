@@ -1,4 +1,5 @@
 class Button{
+  //the default class for button
   constructor(x,y, buttonText, buttonColor){
     this.x = x;
     this.y = y;
@@ -16,6 +17,7 @@ class Button{
   drawButton(){
     stroke('white');
 
+    //draw the background and name of the button
     fill(this.detectHovering() ? this.hoveredColor : this.backgroundColor);
     rect(this.x,this.y,this.buttonWidth,this.buttonHeight,50);
     textAlign(CENTER);
@@ -24,6 +26,7 @@ class Button{
     fill(this.buttonColor);
     text(this.buttonText, this.x + this.buttonWidth/2, this.y + this.buttonHeight/2);
 
+    //if the button is clicked trigger tis custom effect
     if (this.clicked){
       this.triggerEffect();
     }
@@ -31,6 +34,7 @@ class Button{
 
   detectHovering(){
     if (webglVersion === 'p2d'){
+      //due to the different canvas measuring system of webGL mode the equation differe based on whether it is in webGL or not
       return this.x < mouseX && this.x + this.buttonWidth > mouseX && this.y < mouseY && this.y + this.buttonHeight > mouseY;
     }
     return this.x < mouseX-width/2 && this.y < mouseY-height/2 && this.x + this.buttonWidth > mouseX-width/2 && this.y + this.buttonHeight > mouseY- height/2;
@@ -52,10 +56,10 @@ class InformationButton extends Button{
   }
 
   triggerEffect(){
-    //textbox
-    translate(0,0,0);
     fill(this.backgroundColor);
     stroke(this.buttonColor);
+
+    //draw the backround for the text (webGl doesnt support 2d shapes)
     if (webglVersion !== 'p2d'){
       box(width/2,height/2);
     }
@@ -63,17 +67,19 @@ class InformationButton extends Button{
       rect(width/8,height/8, 3*width/4, 3*height/4);
     }
     
-
-    //text
+    //apply these transformations to only the text attached
     push();
     if (webglVersion !== 'p2d'){
+      //move the text in front of the box if it is 3d
       translate(0,0,250);
     }
     textAlign(CENTER);
     fill(this.buttonColor);
     textFont(quicksandFont);
+    //write the title
     textSize(this.titleSize);
     text(this.title,0 + this.webglXOffset,-height/4 + this.titleSize + this.webglYOffset);
+    //write the information attached
     textSize(this.titleSize/this.contentSizeDivisor);
     text(this.contentText,-width/4 + this.webglXOffset,-height/8 + this.webglYOffset,width/2);
     pop();
@@ -81,23 +87,24 @@ class InformationButton extends Button{
 }
 
 class ToggleButton extends Button{
+  //simply just an on or off button
   constructor(x, y, buttonText, buttonColor, hoveredColor, buttonWidth, buttonHeight, clicked){
     super(x, y, buttonText, buttonColor, hoveredColor, buttonWidth, buttonHeight, clicked);
   }
-
   triggerEffect(){
     this.clicked = true;
   }
 }
 
 class RedirectButton extends Button{
+  //redirect the the attached page when clicked
   constructor(x, y, buttonText, buttonColor, location, hoveredColor, buttonWidth, buttonHeight, clicked){
     super(x, y, buttonText, buttonColor, hoveredColor, buttonWidth, buttonHeight, clicked);
     this.location = location;
   }
 
   triggerEffect(){
-    //go to the corresponding page
+    //go to the page that was passed in
     window.location.href = this.location;
   }
 }

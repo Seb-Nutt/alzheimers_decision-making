@@ -5,13 +5,13 @@
 
 ## Needs to have
 
-- A visually appealing homepage
-- A simulation of the Iowa gambling task that the user observes which compares the process and results of a group with alzhiermers and a control group
-- A simulation of the prisoners dilemma that the user can interact with
-- Desciptions of research and findings surrounding the topic alongside the simulations
+- A visually appealing homepage - Done
+- A simulation of the Iowa gambling task that the user observes which compares the process and results of a group with alzhiermers and a control group - Done
+- A simulation of the prisoners dilemma that the user can interact with - Done
+- Desciptions of research and findings surrounding the topic alongside the simulations - Done via the conclusion buttons
 
 ## Nice to have
- - Multiple interactive simulations
+ - Multiple interactive simulations - Done
  - A search bar
- - Visually appealing simulations
- - An interactive 3d model of the brain that lets the user select different sections
+ - Visually appealing simulations - Subjective (I think they look decent)
+ - An interactive 3d model of the brain that lets the user select different sections - Done
